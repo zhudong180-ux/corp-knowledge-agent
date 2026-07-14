@@ -123,21 +123,58 @@ def react_loop_node(state: AgentState) -> AgentState:
         result = TOOL_REGISTRY[tool](sub_q)
         state["steps"].append({"tool": tool, "sub_query": sub_q, "result": result})
 
-        # Reflection: 失败则换一个工具重试
+        # Reflection: 失败则换一个工具重试 + 让 LLM 智能改写 sub_query
         if state["reflection_count"] < max_refl:
             ok, suggestion = reflect(state["question"], tool, result)
             if not ok and state["reflection_count"] < max_refl:
                 state["reflection_count"] += 1
-                alt_tool = "graph_lookup" if tool != "graph_lookup" else "search_docs"
-                if alt_tool in TOOL_REGISTRY:
-                    alt_result = TOOL_REGISTRY[alt_tool](state["question"])
+                # 选一个不同的工具（避免重复同一个工具）
+                alt_tool = _pick_alternative_tool(tool)
+                if alt_tool and alt_tool in TOOL_REGISTRY:
+                    # 让 LLM 智能改写 sub_query，而不是机械地用原问题
+                    new_sub_q = _rewrite_sub_query(state["question"], tool, result, suggestion, alt_tool)
+                    alt_result = TOOL_REGISTRY[alt_tool](new_sub_q)
                     state["steps"].append({
                         "tool": alt_tool,
-                        "sub_query": f"[reflection] {state['question']}",
+                        "sub_query": f"[reflection→{alt_tool}] {new_sub_q}",
                         "result": alt_result,
                     })
 
     return state
+
+
+def _pick_alternative_tool(failed_tool: str) -> str | None:
+    """选一个跟失败工具不同的工具，避免重复同样的失败。"""
+    order = ["search_docs", "query_db", "graph_lookup"]
+    for t in order:
+        if t != failed_tool:
+            return t
+    return None
+
+
+def _rewrite_sub_query(question: str, failed_tool: str, failed_result: dict, suggestion: str, new_tool: str) -> str:
+    """让 LLM 基于失败结果，智能改写 sub_query 给新工具用。
+
+    失败示例：
+    - failed_tool=query_db, question="张三是研发部的吗？他适用什么制度？有什么资产？"
+      → new_tool=graph_lookup, new_sub_q="张三 所属部门及适用制度"
+    - failed_tool=search_docs, question="研发部上个月入职了多少人"
+      → new_tool=query_db, new_sub_q="研发部上月入职员工名单"
+    """
+    # 规则：如果 LLM 没给具体建议，用关键词重写（避免传完整长问题）
+    if not suggestion or suggestion.strip() in {"换工具或换关键词", "建议改用其他工具或换关键词。"}:
+        # 兜底：从原问题里抠核心实体
+        if new_tool == "graph_lookup":
+            # 提取中文姓名（2-3 字）
+            import re as _re
+            m = _re.search(r"[\u4e00-\u9fa5]{2,3}", question)
+            return m.group(0) if m else question
+        return question
+
+    # LLM 给了建议就用建议
+    if len(suggestion) > 80:
+        suggestion = suggestion[:80]
+    return f"{question}（提示：{suggestion}）"
 
 
 def synthesizer_node(state: AgentState) -> AgentState:
