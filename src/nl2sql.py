@@ -82,8 +82,13 @@ class NL2SQL:
             f"{SCHEMA_DESC}\n问题：{question}\n只输出 SQL，不要解释："
         )
         resp = self.llm.invoke(prompt)
-        sql = resp.content.strip().strip("```sql").strip("```").strip()
-        return sql
+        sql = resp.content.strip()
+        # 去掉 <think>...</think> 推理块（MiniMax-M2 等推理模型会输出）
+        sql = re.sub(r"<think>.*?</think>", "", sql, flags=re.DOTALL | re.IGNORECASE)
+        # 去掉 markdown 代码块包裹（```sql / ```SQL / 裸 ``` 都处理）
+        sql = re.sub(r"^```(?:sql|SQL)?\s*", "", sql, flags=re.MULTILINE)
+        sql = re.sub(r"\s*```\s*$", "", sql, flags=re.MULTILINE)
+        return sql.strip()
 
     def run(self, question: str) -> dict:
         sql = self.generate_sql(question)
