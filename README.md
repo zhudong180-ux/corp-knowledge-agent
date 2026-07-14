@@ -8,11 +8,11 @@
 [![Tests](https://img.shields.io/badge/tests-42%2F42%20passing-brightgreen)](tests/)
 [![Code lines](https://img.shields.io/badge/code-~2000%20lines-blue)](src/)
 
-> 企业知识库智能体演示项目，覆盖 JD **Graph RAG、NL2SQL、ReAct/Reflection、MCP、LangGraph、LlamaIndex、Prompt 工程** 7 个关键词。
+> 企业知识库工具项目，覆盖 JD **Graph RAG、NL2SQL、ReAct/Reflection、MCP、LangGraph、LlamaIndex、Prompt 工程** 7 个关键词。
 
 ## 它能做什么
 
-智能体演示项目。
+项目工具集。
 
 业务场景：虚构「极星科技」公司的内部助理，员工可以问：
 
