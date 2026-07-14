@@ -1,0 +1,43 @@
+{
+  "nodes": [
+    {"id": "员工:张三", "type": "Employee", "attrs": {"dept": "研发部", "level": "P5"}},
+    {"id": "员工:李四", "type": "Employee", "attrs": {"dept": "研发部", "level": "P4"}},
+    {"id": "员工:王五", "type": "Employee", "attrs": {"dept": "产品部", "level": "P5"}},
+    {"id": "员工:赵六", "type": "Employee", "attrs": {"dept": "市场部", "level": "P4"}},
+    {"id": "员工:钱七", "type": "Employee", "attrs": {"dept": "HR部", "level": "P5"}},
+    {"id": "员工:孙八", "type": "Employee", "attrs": {"dept": "研发部", "level": "P6"}},
+    {"id": "部门:研发部", "type": "Department"},
+    {"id": "部门:产品部", "type": "Department"},
+    {"id": "部门:市场部", "type": "Department"},
+    {"id": "部门:HR部", "type": "Department"},
+    {"id": "部门:行政部", "type": "Department"},
+    {"id": "制度:年假", "type": "Policy", "attrs": {"min_years": 1, "base_days": 5}},
+    {"id": "制度:加班调休", "type": "Policy"},
+    {"id": "制度:差旅报销", "type": "Policy"},
+    {"id": "制度:笔记本配发", "type": "Policy"},
+    {"id": "制度:入职培训", "type": "Policy"},
+    {"id": "资产:MacBook-001", "type": "Asset", "attrs": {"model": "MBP 14 M3 Pro"}},
+    {"id": "资产:MacBook-002", "type": "Asset", "attrs": {"model": "MBP 16 M3 Max"}},
+    {"id": "资产:ThinkPad-001", "type": "Asset", "attrs": {"model": "X1 Carbon"}},
+    {"id": "资产:显示器-001", "type": "Asset", "attrs": {"model": "Dell U2723"}}
+  ],
+  "edges": [
+    {"src": "员工:张三", "rel": "BELONGS_TO", "dst": "部门:研发部"},
+    {"src": "员工:李四", "rel": "BELONGS_TO", "dst": "部门:研发部"},
+    {"src": "员工:王五", "rel": "BELONGS_TO", "dst": "部门:产品部"},
+    {"src": "员工:赵六", "rel": "BELONGS_TO", "dst": "部门:市场部"},
+    {"src": "员工:钱七", "rel": "BELONGS_TO", "dst": "部门:HR部"},
+    {"src": "员工:孙八", "rel": "BELONGS_TO", "dst": "部门:研发部"},
+    {"src": "部门:研发部", "rel": "SUBJECT_TO", "dst": "制度:年假"},
+    {"src": "部门:研发部", "rel": "SUBJECT_TO", "dst": "制度:加班调休"},
+    {"src": "部门:产品部", "rel": "SUBJECT_TO", "dst": "制度:年假"},
+    {"src": "部门:市场部", "rel": "SUBJECT_TO", "dst": "制度:差旅报销"},
+    {"src": "部门:HR部", "rel": "SUBJECT_TO", "dst": "制度:年假"},
+    {"src": "部门:研发部", "rel": "SUBJECT_TO", "dst": "制度:笔记本配发"},
+    {"src": "部门:HR部", "rel": "SUBJECT_TO", "dst": "制度:入职培训"},
+    {"src": "员工:张三", "rel": "OWNS", "dst": "资产:MacBook-001"},
+    {"src": "员工:孙八", "rel": "OWNS", "dst": "资产:MacBook-002"},
+    {"src": "员工:李四", "rel": "OWNS", "dst": "资产:ThinkPad-001"},
+    {"src": "员工:王五", "rel": "OWNS", "dst": "资产:显示器-001"}
+  ]
+}

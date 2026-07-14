@@ -1,0 +1,27 @@
+[
+  {
+    "q": "我们公司年假怎么算？",
+    "expect_tools": ["search_docs"],
+    "expect_keywords": ["年假", "工作"]
+  },
+  {
+    "q": "研发部上个月入职了多少人？",
+    "expect_tools": ["query_db"],
+    "expect_keywords": ["研发部", "入职"]
+  },
+  {
+    "q": "张三名下有几台笔记本？",
+    "expect_tools": ["query_db"],
+    "expect_keywords": ["张三"]
+  },
+  {
+    "q": "年假制度适用于哪些部门？",
+    "expect_tools": ["graph_lookup"],
+    "expect_keywords": ["年假"]
+  },
+  {
+    "q": "申请新笔记本要走什么流程？",
+    "expect_tools": ["search_docs"],
+    "expect_keywords": ["申请", "审批"]
+  }
+]

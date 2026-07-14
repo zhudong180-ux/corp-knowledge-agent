@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+data/employees.db
+data/chroma/
+data/.chroma_cache/
+.embed_cache/
+output/*.log
+output/*.png
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/.chroma_cache/
