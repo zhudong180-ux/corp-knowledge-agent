@@ -73,8 +73,6 @@ bash demo/run_all.sh real
   step1. graph_lookup(...) → 找到实体：员工:张三 → 部门:研发部...
 ```
 
-完整 15 分钟讲解稿见 [`demo/questions.md`](demo/questions.md)。
-
 ## 目录结构
 
 ```
