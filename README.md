@@ -22,7 +22,7 @@
 张三是研发部的吗？他适用什么制度？有什么资产？  →  Graph RAG + 多工具融合
 ```
 
-## 30 秒上手
+## 安装指导
 
 ```bash
 git clone https://github.com/zhudong180-ux/corp-knowledge-agent.git
